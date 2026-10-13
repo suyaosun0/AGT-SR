@@ -1,0 +1,68 @@
+{
+  "model": {
+    "checkpoint": "facebook/wav2vec2-base",
+    "fmllr_dim": 80,
+    "pathway_dim": 256,
+    "d_model": 512,
+    "encoder_layers": 12,
+    "decoder_layers": 6,
+    "heads": 8,
+    "ff_dim": 2048,
+    "dropout": 0.1,
+    "ctc_layers": [4, 8, 10, 12],
+    "eta": 0.1,
+    "local_kernel": 3,
+    "activation": "relu",
+    "norm_first": false,
+    "shared_grid": "wav2vec",
+    "interpolation_align_corners": false,
+    "max_positions": 20000
+  },
+  "training": {
+    "epochs": 40,
+    "global_batch_size": 32,
+    "expected_world_size": 4,
+    "learning_rate": 0.0002,
+    "warmup_steps": 20000,
+    "lambda_cao": 0.3,
+    "gamma": 1.0,
+    "epsilon": 1e-8,
+    "betas": [0.9, 0.999],
+    "weight_decay": 0.01,
+    "adam_epsilon": 1e-8,
+    "after_warmup": "constant",
+    "num_workers": 4,
+    "seed": 42,
+    "log_every": 20,
+    "output_dir": "runs/agt_sr"
+  },
+  "data": {
+    "train_manifest": "data/train.jsonl",
+    "valid_manifest": "data/valid.jsonl",
+    "vocabulary": "data/vocab.json"
+  },
+  "fbank": {
+    "frame_length_ms": 25.0,
+    "frame_shift_ms": 10.0
+  },
+  "augmentation": {
+    "musan": {
+      "enabled": true,
+      "root": "data/musan",
+      "probability": 0.5,
+      "snr_db": [0.0, 20.0]
+    },
+    "specaugment": {
+      "enabled": true,
+      "time_masks": 2,
+      "time_width": 40,
+      "frequency_masks": 2,
+      "frequency_width": 15
+    }
+  },
+  "decoding": {
+    "beam_size": 10,
+    "ctc_weight": 0.3,
+    "max_tokens": 500
+  }
+}
